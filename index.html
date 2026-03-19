@@ -3,33 +3,902 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Made For Peculiar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a1a;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Matrix Rain Effect */
+        .matrix-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background: linear-gradient(180deg, #0a0a1a 0%, #1a0a2e 100%);
+        }
+
+        canvas#matrix {
+            display: block;
+        }
+
+        /* Countdown Text */
+        .countdown-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            font-weight: bold;
+            color: #ff69b4;
+            text-shadow: 0 0 30px #ff1493, 0 0 60px #ff1493;
+            z-index: 10;
+            opacity: 0;
+            animation: pulse 1s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+        }
+
+        /* Main Message */
+        .main-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+            opacity: 0;
+        }
+
+        .main-message h1 {
+            font-size: 4rem;
+            color: #ff69b4;
+            text-shadow: 0 0 20px #ff1493;
+            margin: 0.5rem 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Heart Animation */
+        .heart-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            opacity: 0;
+        }
+
+        .heart {
+            width: 150px;
+            height: 150px;
+            background: #ff69b4;
+            position: relative;
+            transform: rotate(-45deg);
+            box-shadow: 0 0 50px #ff1493;
+            animation: heartbeat 1.5s ease infinite;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            width: 150px;
+            height: 150px;
+            position: absolute;
+            background: #ff69b4;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -75px;
+            left: 0;
+        }
+
+        .heart::after {
+            left: 75px;
+            top: 0;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: rotate(-45deg) scale(1); }
+            50% { transform: rotate(-45deg) scale(1.1); }
+        }
+
+        /* Starfield Background */
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            opacity: 0;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Cat Animation Section */
+        .cat-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+        }
+
+        .cat-container {
+            text-align: center;
+            position: relative;
+        }
+
+        .cat {
+            font-size: 8rem;
+            animation: bounce 2s ease infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
+        }
+
+        .balloons {
+            font-size: 4rem;
+            position: absolute;
+            top: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-15px); }
+        }
+
+        /* Photo Book Section */
+        .photobook-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 6;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+            overflow: hidden;
+        }
+
+        .envelope {
+            width: 200px;
+            height: 250px;
+            background: linear-gradient(145deg, #ffe4e1, #ffc0cb);
+            border-radius: 10px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.6s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding-bottom: 20px;
+        }
+
+        .envelope:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope-hands {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .envelope-heart {
+            color: #ff4757;
+            font-size: 2rem;
+            animation: pulse-heart 1s ease infinite;
+        }
+
+        @keyframes pulse-heart {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .photo-card {
+            position: absolute;
+            width: 340px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            transform: rotateY(90deg);
+            opacity: 0;
+            transition: all 0.8s ease;
+        }
+
+        .photo-card.active {
+            transform: rotateY(0deg);
+            opacity: 1;
+        }
+
+        .photo-card h3 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 15px;
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            color: #d63384;
+            font-size: 1.3rem;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .photo-grid img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .nav-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .dot.active {
+            background: #ff69b4;
+        }
+
+        /* Heart Photo Collage */
+        .collage-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 7;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+        }
+
+        .heart-collage {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+
+        .collage-photo {
+            position: absolute;
+            width: 75px;
+            height: 75px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.6);
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            animation: fadeInScale 0.5s ease forwards;
+            opacity: 0;
+            transform: scale(0);
+            transition: transform 0.3s;
+        }
+
+        .collage-photo:hover {
+            transform: scale(1.2) !important;
+            z-index: 100;
+        }
+
+        .collage-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes fadeInScale {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Floating hearts */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: #ff69b4;
+            font-size: 1.5rem;
+            animation: floatUp 4s ease-in forwards;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+
+        /* Tap hint */
+        .tap-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            animation: blink 2s infinite;
+            z-index: 20;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.2; }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .countdown-text { font-size: 5rem; }
+            .main-message h1 { font-size: 2.5rem; }
+            .photo-card { width: 90vw; max-width: 340px; }
+            .heart-collage { transform: scale(0.8); }
+            .collage-photo { width: 60px; height: 60px; }
+        }
+
+        /* Progress indicator */
+        .progress-bar {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .progress-bar.visible {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to Pecsy</h1>
-    <img src="photo1.jpg" alt="Image 1">
-    <img src="photo2.jpg" alt="Image 2">
-    <img src="photo3.jpg" alt="Image 3">
-    <img src="photo4.jpg" alt="Image 4">
-    <img src="photo5.jpg" alt="Image 5">
-    <img src="photo6.jpg" alt="Image 6">
-    <img src="photo7.jpg" alt="Image 7">
-    <img src="photo8.jpg" alt="Image 8">
-    <img src="photo9.jpg" alt="Image 9">
-    <img src="photo10.jpg" alt="Image 10">
-    <img src="photo11.jpg" alt="Image 11">
-    <img src="photo12.jpg" alt="Image 12">
-    <img src="photo13.jpg" alt="Image 13">
-    <img src="photo14.jpg" alt="Image 14">
-    <img src="photo15.jpg" alt="Image 15">
-    <img src="photo16.jpg" alt="Image 16">
-    <img src="photo17.jpg" alt="Image 17">
-    <img src="photo18.jpg" alt="Image 18">
-    <img src="photo19.jpg" alt="Image 19">
-    <img src="photo20.jpg" alt="Image 20">
-    <img src="photo21.jpg" alt="Image 21">
-    <img src="photo22.jpg" alt="Image 22">
-    <img src="photo23.jpg" alt="Image 23">
-    <img src="photo24.jpg" alt="Image 24">
+
+    <!-- Matrix Rain Section -->
+    <div class="matrix-container" id="matrixSection">
+        <canvas id="matrix"></canvas>
+        <div class="countdown-text" id="countdown">3</div>
+        <div class="main-message" id="mainMessage">
+            <h1 style="animation-delay: 0s">MY</h1>
+            <h1 style="animation-delay: 0.3s">LOVE</h1>
+            <h1 style="animation-delay: 0.6s">PECULIAR</h1>
+        </div>
+        <div class="heart-container" id="heartContainer">
+            <div class="heart"></div>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar">Made with ❤️ for Peculiar</div>
+
+    <!-- Starfield -->
+    <div class="starfield" id="starfield"></div>
+
+    <!-- Cat Section -->
+    <div class="cat-section" id="catSection">
+        <div class="cat-container">
+            <div class="balloons">🎈🎈🎈🎈🎈</div>
+            <div class="cat">🐱</div>
+            <p style="color: #fff; margin-top: 20px; font-size: 1.2rem;">Something special for you...</p>
+        </div>
+        <p class="tap-hint">Tap anywhere to continue</p>
+    </div>
+
+    <!-- Photo Book Section -->
+    <div class="photobook-section" id="photobookSection">
+        <div class="envelope" id="envelope">
+            <div class="envelope-hands">🤲</div>
+            <div class="envelope-heart">❤️</div>
+        </div>
+        
+        <div class="photo-card" id="photoCard1">
+            <h3>My Love Peculiar ❤️</h3>
+            <div class="photo-grid" id="grid1">
+                <!-- Photos 1-4 -->
+            </div>
+            <div class="nav-dots">
+                <span class="dot active" onclick="showCard(1)"></span>
+                <span class="dot" onclick="showCard(2)"></span>
+                <span class="dot" onclick="showCard(3)"></span>
+                <span class="dot" onclick="showCard(4)"></span>
+                <span class="dot" onclick="showCard(5)"></span>
+                <span class="dot" onclick="showCard(6)"></span>
+            </div>
+        </div>
+
+        <div class="photo-card" id="photoCard2" style="display: none;">
+            <h3>My Beautiful Queen 👑</h3>
+            <div class="photo-grid" id="grid2">
+                <!-- Photos 5-8 -->
+            </div>
+            <div class="nav-dots">
+                <span class="dot" onclick="showCard(1)"></span>
+                <span class="dot active" onclick="showCard(2)"></span>
+                <span class="dot" onclick="showCard(3)"></span>
+                <span class="dot" onclick="showCard(4)"></span>
+                <span class="dot" onclick="showCard(5)"></span>
+                <span class="dot" onclick="showCard(6)"></span>
+            </div>
+        </div>
+
+        <div class="photo-card" id="photoCard3" style="display: none;">
+            <h3>Forever & Always 💕</h3>
+            <div class="photo-grid" id="grid3">
+                <!-- Photos 9-12 -->
+            </div>
+            <div class="nav-dots">
+                <span class="dot" onclick="showCard(1)"></span>
+                <span class="dot" onclick="showCard(2)"></span>
+                <span class="dot active" onclick="showCard(3)"></span>
+                <span class="dot" onclick="showCard(4)"></span>
+                <span class="dot" onclick="showCard(5)"></span>
+                <span class="dot" onclick="showCard(6)"></span>
+            </div>
+        </div>
+
+        <div class="photo-card" id="photoCard4" style="display: none;">
+            <h3>My Heart Belongs to You 💗</h3>
+            <div class="photo-grid" id="grid4">
+                <!-- Photos 13-16 -->
+            </div>
+            <div class="nav-dots">
+                <span class="dot" onclick="showCard(1)"></span>
+                <span class="dot" onclick="showCard(2)"></span>
+                <span class="dot" onclick="showCard(3)"></span>
+                <span class="dot active" onclick="showCard(4)"></span>
+                <span class="dot" onclick="showCard(5)"></span>
+                <span class="dot" onclick="showCard(6)"></span>
+            </div>
+        </div>
+
+        <div class="photo-card" id="photoCard5" style="display: none;">
+            <h3>Every Moment With You ✨</h3>
+            <div class="photo-grid" id="grid5">
+                <!-- Photos 17-20 -->
+            </div>
+            <div class="nav-dots">
+                <span class="dot" onclick="showCard(1)"></span>
+                <span class="dot" onclick="showCard(2)"></span>
+                <span class="dot" onclick="showCard(3)"></span>
+                <span class="dot" onclick="showCard(4)"></span>
+                <span class="dot active" onclick="showCard(5)"></span>
+                <span class="dot" onclick="showCard(6)"></span>
+            </div>
+        </div>
+
+        <div class="photo-card" id="photoCard6" style="display: none;">
+            <h3>You Are My Everything 🌹</h3>
+            <div class="photo-grid" id="grid6">
+                <!-- Photos 21-24 -->
+            </div>
+            <div class="nav-dots">
+                <span class="dot" onclick="showCard(1)"></span>
+                <span class="dot" onclick="showCard(2)"></span>
+                <span class="dot" onclick="showCard(3)"></span>
+                <span class="dot" onclick="showCard(4)"></span>
+                <span class="dot" onclick="showCard(5)"></span>
+                <span class="dot active" onclick="showCard(6)"></span>
+            </div>
+            <p style="text-align: center; margin-top: 10px; color: #666; font-size: 0.8rem;">Double-tap to see the magic ✨</p>
+        </div>
+    </div>
+
+    <!-- Heart Collage Section -->
+    <div class="collage-section" id="collageSection">
+        <div class="heart-collage" id="heartCollage"></div>
+        <p class="tap-hint" id="collageHint">Tap photos to see them glow</p>
+    </div>
+
+    <!-- Floating Hearts Container -->
+    <div class="floating-hearts" id="floatingHearts"></div>
+
+    <script>
+        // Photo configuration - Using photo1.jpg through photo24.jpg
+        const photos = [
+            './images/photo1.jpg',
+            './images/photo2.jpg',
+            './images/photo3.jpg',
+            './images/photo4.jpg',
+            './images/photo5.jpg',
+            './images/photo6.jpg',
+            './images/photo7.jpg',
+            './images/photo8.jpg',
+            './images/photo9.jpg',
+            './images/photo10.jpg',
+            './images/photo11.jpg',
+            './images/photo12.jpg',
+            './images/photo13.jpg',
+            './images/photo14.jpg',
+            './images/photo15.jpg',
+            './images/photo16.jpg',
+            './images/photo17.jpg',
+            './images/photo18.jpg',
+            './images/photo19.jpg',
+            './images/photo20.jpg',
+            './images/photo21.jpg',
+            './images/photo22.jpg',
+            './images/photo23.jpg',
+            './images/photo24.jpg'
+        ];
+
+        // Populate photo grids
+        function populateGrids() {
+            // Grid 1: Photos 0-3
+            const grid1 = document.getElementById('grid1');
+            for(let i = 0; i < 4; i++) {
+                grid1.innerHTML += `<img src="${photos[i]}" alt="Love ${i+1}" onerror="this.src='https://via.placeholder.com/150?text=Photo+${i+1}'">`;
+            }
+
+            // Grid 2: Photos 4-7
+            const grid2 = document.getElementById('grid2');
+            for(let i = 4; i < 8; i++) {
+                grid2.innerHTML += `<img src="${photos[i]}" alt="Love ${i+1}" onerror="this.src='https://via.placeholder.com/150?text=Photo+${i+1}'">`;
+            }
+
+            // Grid 3: Photos 8-11
+            const grid3 = document.getElementById('grid3');
+            for(let i = 8; i < 12; i++) {
+                grid3.innerHTML += `<img src="${photos[i]}" alt="Love ${i+1}" onerror="this.src='https://via.placeholder.com/150?text=Photo+${i+1}'">`;
+            }
+
+            // Grid 4: Photos 12-15
+            const grid4 = document.getElementById('grid4');
+            for(let i = 12; i < 16; i++) {
+                grid4.innerHTML += `<img src="${photos[i]}" alt="Love ${i+1}" onerror="this.src='https://via.placeholder.com/150?text=Photo+${i+1}'">`;
+            }
+
+            // Grid 5: Photos 16-19
+            const grid5 = document.getElementById('grid5');
+            for(let i = 16; i < 20; i++) {
+                grid5.innerHTML += `<img src="${photos[i]}" alt="Love ${i+1}" onerror="this.src='https://via.placeholder.com/150?text=Photo+${i+1}'">`;
+            }
+
+            // Grid 6: Photos 20-23
+            const grid6 = document.getElementById('grid6');
+            for(let i = 20; i < 24; i++) {
+                grid6.innerHTML += `<img src="${photos[i]}" alt="Love ${i+1}" onerror="this.src='https://via.placeholder.com/150?text=Photo+${i+1}'">`;
+            }
+        }
+
+        // Matrix Rain Effect
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for (let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * -100;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(10, 10, 26, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#ff69b4';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 50);
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Countdown Sequence
+        let count = 3;
+        const countdownEl = document.getElementById('countdown');
+        const mainMessage = document.getElementById('mainMessage');
+        const heartContainer = document.getElementById('heartContainer');
+        const matrixSection = document.getElementById('matrixSection');
+        const starfield = document.getElementById('starfield');
+        const catSection = document.getElementById('catSection');
+        const progressBar = document.getElementById('progressBar');
+
+        function startSequence() {
+            populateGrids();
+            countdownEl.style.opacity = '1';
+            
+            const interval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownEl.textContent = count;
+                    countdownEl.style.animation = 'none';
+                    setTimeout(() => countdownEl.style.animation = 'pulse 1s ease-in-out', 10);
+                } else {
+                    clearInterval(interval);
+                    countdownEl.style.display = 'none';
+                    showMainMessage();
+                }
+            }, 1000);
+        }
+
+        function showMainMessage() {
+            mainMessage.style.opacity = '1';
+            const texts = mainMessage.querySelectorAll('h1');
+            texts.forEach((text, index) => {
+                setTimeout(() => {
+                    text.style.opacity = '1';
+                }, index * 300);
+            });
+
+            setTimeout(() => {
+                mainMessage.style.opacity = '0';
+                heartContainer.style.opacity = '1';
+                setTimeout(() => {
+                    heartContainer.style.opacity = '0';
+                    transitionToCat();
+                }, 3000);
+            }, 4000);
+        }
+
+        function transitionToCat() {
+            matrixSection.style.display = 'none';
+            starfield.style.opacity = '1';
+            createStars();
+            catSection.style.display = 'flex';
+            progressBar.classList.add('visible');
+            
+            setTimeout(() => {
+                catSection.style.opacity = '1';
+            }, 100);
+        }
+
+        // Create Stars
+        function createStars() {
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starfield.appendChild(star);
+            }
+        }
+
+        // Cat Section Click
+        catSection.addEventListener('click', () => {
+            catSection.style.display = 'none';
+            document.getElementById('photobookSection').style.display = 'flex';
+            createFloatingHearts();
+        });
+
+        // Envelope Click
+        const envelope = document.getElementById('envelope');
+        const photoCard1 = document.getElementById('photoCard1');
+        
+        envelope.addEventListener('click', () => {
+            envelope.style.display = 'none';
+            photoCard1.style.display = 'block';
+            setTimeout(() => photoCard1.classList.add('active'), 100);
+            createFloatingHearts();
+        });
+
+        // Card Navigation
+        let currentCard = 1;
+        function showCard(num) {
+            // Hide current card
+            const currentCardEl = document.getElementById(`photoCard${currentCard}`);
+            currentCardEl.classList.remove('active');
+            
+            setTimeout(() => {
+                currentCardEl.style.display = 'none';
+                
+                // Show new card
+                const newCard = document.getElementById(`photoCard${num}`);
+                newCard.style.display = 'block';
+                setTimeout(() => newCard.classList.add('active'), 50);
+                
+                currentCard = num;
+                createFloatingHearts();
+            }, 300);
+        }
+
+        // Double tap on last card to go to collage
+        let lastTap = 0;
+        document.getElementById('photoCard6').addEventListener('click', (e) => {
+            const currentTime = new Date().getTime();
+            if (currentTime - lastTap < 300) {
+                document.getElementById('photobookSection').style.display = 'none';
+                showCollage();
+            }
+            lastTap = currentTime;
+        });
+
+        // Heart Collage
+        function showCollage() {
+            const collageSection = document.getElementById('collageSection');
+            collageSection.style.display = 'flex';
+            
+            const heartCollage = document.getElementById('heartCollage');
+            
+            // Heart shape positions (relative to center) - 24 positions for 24 photos
+            const positions = [
+                {x: 0, y: -140},      // Top center
+                {x: 40, y: -130},     // Top right 1
+                {x: -40, y: -130},    // Top left 1
+                {x: 80, y: -110},     // Top right 2
+                {x: -80, y: -110},    // Top left 2
+                {x: 110, y: -80},     // Upper right
+                {x: -110, y: -80},    // Upper left
+                {x: 130, y: -40},     // Right top
+                {x: -130, y: -40},    // Left top
+                {x: 140, y: 0},       // Right center
+                {x: -140, y: 0},      // Left center
+                {x: 130, y: 40},      // Right bottom
+                {x: -130, y: 40},     // Left bottom
+                {x: 110, y: 80},      // Lower right
+                {x: -110, y: 80},     // Lower left
+                {x: 80, y: 110},      // Bottom right 2
+                {x: -80, y: 110},     // Bottom left 2
+                {x: 40, y: 130},      // Bottom right 1
+                {x: -40, y: 130},     // Bottom left 1
+                {x: 0, y: 140},       // Bottom center
+                {x: 25, y: -60},      // Inner right
+                {x: -25, y: -60},     // Inner left
+                {x: 25, y: 60},       // Inner bottom right
+                {x: -25, y: 60}       // Inner bottom left
+            ];
+
+            photos.forEach((photo, index) => {
+                setTimeout(() => {
+                    const div = document.createElement('div');
+                    div.className = 'collage-photo';
+                    const pos = positions[index];
+                    div.style.left = (200 + pos.x - 37) + 'px';
+                    div.style.top = (200 + pos.y - 37) + 'px';
+                    div.style.animationDelay = (index * 0.1) + 's';
+                    
+                    const img = document.createElement('img');
+                    img.src = photo;
+                    img.alt = `Peculiar ${index + 1}`;
+                    img.onerror = function() {
+                        this.src = `https://via.placeholder.com/75?text=${index+1}`;
+                    };
+                    div.appendChild(img);
+                    
+                    heartCollage.appendChild(div);
+                }, index * 100);
+            });
+
+            // Continuous floating hearts
+            setInterval(createFloatingHearts, 2000);
+        }
+
+        // Floating Hearts
+        function createFloatingHearts() {
+            const container = document.getElementById('floatingHearts');
+            const heartEmojis = ['❤️', '💖', '💕', '💗', '💝', '💘', '💓'];
+            
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'floating-heart';
+                    heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.bottom = '0';
+                    heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                    container.appendChild(heart);
+                    
+                    setTimeout(() => heart.remove(), 4000);
+                }, i * 300);
+            }
+        }
+
+        // Start the sequence on load
+        window.addEventListener('load', startSequence);
+
+        // Prevent scrolling on mobile
+        document.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+        
+        // Keyboard navigation for cards
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('photobookSection').style.display === 'flex') {
+                if (e.key === 'ArrowRight' && currentCard < 6) {
+                    showCard(currentCard + 1);
+                } else if (e.key === 'ArrowLeft' && currentCard > 1) {
+                    showCard(currentCard - 1);
+                }
+            }
+        });
+    </script>
 </body>
 </html>
