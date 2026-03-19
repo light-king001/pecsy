@@ -3,120 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Full Featured Gallery</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* CSS for animations and effects */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #000;
-            overflow: hidden;
-            color: #fff;
-        }
-
-        /* Matrix rain effect */
-        .rain {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: -1;
-            opacity: 0.5;
-        }
-
-        /* Additional styles for countdown and gallery */
-        .countdown {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            font-size: 2rem;
-            color: crimson;
-        }
-
-        .gallery {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 100px 0;
-        }
-
-        .photo-card {
-            margin: 10px;
-            border: 2px solid #fff;
-            transition: transform 0.3s;
-        }
-
-        .photo-card:hover {
-            transform: scale(1.05);
-        }
-
-        .heart-collage {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 300px;
-            height: 300px;
-            background-image: url('heart-collage.png');
-            background-size: cover;
-            opacity: 0.7;
-        }
-    </style>
+    <title>Document</title>
 </head>
 <body>
-    <div class="rain" id="rain"></div>
-    <div class="countdown" id="countdown"></div>
-    <div class="gallery">
-        <div class="photo-card"><img src="photo1.jpg" alt="Photo 1"></div>
-        <div class="photo-card"><img src="photo2.jpg" alt="Photo 2"></div>
-        <div class="photo-card"><img src="photo3.jpg" alt="Photo 3"></div>
-        <div class="photo-card"><img src="photo4.jpg" alt="Photo 4"></div>
-    </div>
-    <div class="heart-collage"></div>
-    <script>
-        // JavaScript for countdown timer
-        const countdownDate = new Date('2026-12-31T23:59:59').getTime();
-        const countdownElement = document.getElementById('countdown');
-
-        const countdownFunction = setInterval(() => {
-            const now = new Date().getTime();
-            const distance = countdownDate - now;
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-
-            if (distance < 0) {
-                clearInterval(countdownFunction);
-                countdownElement.innerHTML = 'EXPIRED';
-            }
-        }, 1000);
-
-        // Function for matrix rain effect
-        const rain = document.getElementById('rain');
-        const matrixRain = () => {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            const fontSize = '16px';
-            const columns = Math.floor(window.innerWidth / 20);
-            for (let i = 0; i < columns; i++) {
-                const span = document.createElement('span');
-                span.style.fontSize = fontSize;
-                span.style.color = '#0f0';
-                span.style.position = 'absolute';
-                span.style.bottom = '100%';
-                span.style.left = `${i * 20}px`;
-                span.textContent = chars.charAt(Math.floor(Math.random() * chars.length));
-                rain.appendChild(span);
-                const fall = () => {
-                    const y = Math.floor(Math.random() * (window.innerHeight + 20));
-                    span.style.transform = `translateY(${y}px)`;
-                };
-                setInterval(fall, 100);
-            }
-        };
-        matrixRain();
-    </script>
+    <h1>Welcome to Pecsy</h1>
+    <img src="photo1.jpg" alt="Image 1">
+    <img src="photo2.jpg" alt="Image 2">
+    <img src="photo3.jpg" alt="Image 3">
+    <img src="photo4.jpg" alt="Image 4">
+    <img src="photo5.jpg" alt="Image 5">
+    <img src="photo6.jpg" alt="Image 6">
+    <img src="photo7.jpg" alt="Image 7">
+    <img src="photo8.jpg" alt="Image 8">
+    <img src="photo9.jpg" alt="Image 9">
+    <img src="photo10.jpg" alt="Image 10">
+    <img src="photo11.jpg" alt="Image 11">
+    <img src="photo12.jpg" alt="Image 12">
+    <img src="photo13.jpg" alt="Image 13">
+    <img src="photo14.jpg" alt="Image 14">
+    <img src="photo15.jpg" alt="Image 15">
+    <img src="photo16.jpg" alt="Image 16">
+    <img src="photo17.jpg" alt="Image 17">
+    <img src="photo18.jpg" alt="Image 18">
+    <img src="photo19.jpg" alt="Image 19">
+    <img src="photo20.jpg" alt="Image 20">
+    <img src="photo21.jpg" alt="Image 21">
+    <img src="photo22.jpg" alt="Image 22">
+    <img src="photo23.jpg" alt="Image 23">
+    <img src="photo24.jpg" alt="Image 24">
 </body>
 </html>
